@@ -494,36 +494,6 @@ async def root():
     return {"message": "投稿アプリAPI が正常に動作しています", "version": "1.0.0"}
 ```
 
-### 3.8 バックエンド用Dockerfile
-
-**ファイル作成**: `server/Dockerfile.dev`
-
-```dockerfile
-# Python 3.11 の軽量版イメージを使用
-FROM python:3.11-slim
-
-# 作業ディレクトリを設定
-WORKDIR /app
-
-# Python の設定
-# PYTHONUNBUFFERED: 出力のバッファリングを無効化（ログが即座に表示される）
-# PYTHONDONTWRITEBYTECODE: .pyc ファイルの生成を無効化
-ENV PYTHONUNBUFFERED=1
-ENV PYTHONDONTWRITEBYTECODE=1
-
-# 依存関係をインストール
-COPY requirements.txt .
-RUN pip install --no-cache-dir -r requirements.txt
-
-# アプリケーションコードをコピー
-COPY . .
-
-# ポート8000を公開
-EXPOSE 8000
-
-# 開発サーバーを起動（ホットリロード有効）
-CMD ["uvicorn", "app.main:app", "--host", "0.0.0.0", "--port", "8000", "--reload"]
-```
 
 ---
 
@@ -646,7 +616,10 @@ ReactDOM.createRoot(document.getElementById('root')).render(
 
 ### 4.5 API通信層
 
-**ディレクトリ作成**: `client/src/api/`
+```bash
+# API通信用のディレクトリとファイルを作成
+mkdir -p client/src/api
+```
 
 **ファイル作成**: `client/src/api/posts.js`
 
@@ -711,7 +684,10 @@ export const postsApi = {
 
 ### 4.6 カスタムフック（状態管理）
 
-**ディレクトリ作成**: `client/src/hooks/`
+```bash
+# カスタムフック用のディレクトリとファイルを作成
+mkdir -p client/src/hooks
+```
 
 **ファイル作成**: `client/src/hooks/usePosts.js`
 
@@ -785,7 +761,10 @@ export function usePosts() {
 
 ### 4.7 UIコンポーネント
 
-**ディレクトリ作成**: `client/src/components/`
+```bash
+# UIコンポーネント用のディレクトリとファイルを作成
+mkdir -p client/src/components
+```
 
 **ファイル作成**: `client/src/components/PostList.jsx`
 
@@ -944,32 +923,6 @@ function App() {
 export default App;
 ```
 
-### 4.9 フロントエンド用Dockerfile
-
-**ファイル作成**: `client/Dockerfile.dev`
-
-```dockerfile
-# Node.js 18 の Alpine 版（軽量）イメージを使用
-FROM node:18-alpine
-
-# 作業ディレクトリを設定
-WORKDIR /app
-
-# package.json をコピーして依存関係をインストール
-# これにより、ソースコード変更時でも依存関係の再インストールを避けられる
-COPY package*.json ./
-RUN npm install
-
-# アプリケーションのソースコードをコピー
-COPY . .
-
-# ポート5173を公開（Viteのデフォルトポート）
-EXPOSE 5173
-
-# 開発サーバーを起動（ホットリロード有効）
-# --host 0.0.0.0: Docker コンテナ外からアクセス可能にする
-CMD ["npm", "run", "dev", "--", "--host", "0.0.0.0"]
-```
 
 ---
 
@@ -1016,10 +969,11 @@ services:
 
   # バックエンドサーバー（FastAPI）
   server:
-    # Dockerfileからイメージをビルド
-    build:
-      context: ../server        # ビルドコンテキスト（Dockerfileがある場所）
-      dockerfile: Dockerfile.dev  # 開発用Dockerfile
+    # Python 3.11 slim イメージを使用
+    image: python:3.11-slim
+    
+    # 作業ディレクトリ
+    working_dir: /app
     
     # ボリューム（ホットリロード対応）
     volumes:
@@ -1031,6 +985,7 @@ services:
       # データベース接続文字列（サービス名'db'でアクセス可能）
       DATABASE_URL: postgresql://postgres:password@db:5432/app
       DEBUG: "true"   # デバッグモード有効
+      PYTHONUNBUFFERED: "1"  # Python出力のバッファリング無効化
     
     # ポート設定
     ports:
@@ -1041,17 +996,16 @@ services:
       db:
         condition: service_healthy  # dbのヘルスチェックが成功するまで待機
     
-    # コンテナ起動時に実行するコマンド
-    # uvicorn: Python ASGI サーバー
-    # --reload: ファイル変更時の自動再起動
-    command: uvicorn app.main:app --host 0.0.0.0 --port 8000 --reload
+    # 起動コマンド
+    command: sh -c "pip install -r requirements.txt && uvicorn app.main:app --host 0.0.0.0 --port 8000 --reload"
 
   # フロントエンドクライアント（React + Vite）
   client:
-    # Dockerfileからイメージをビルド
-    build:
-      context: ../client        # ビルドコンテキスト
-      dockerfile: Dockerfile.dev  # 開発用Dockerfile
+    # Node.js 18 Alpine イメージを使用
+    image: node:18-alpine
+    
+    # 作業ディレクトリ
+    working_dir: /app
     
     # ボリューム（ホットリロード対応）
     volumes:
@@ -1065,6 +1019,9 @@ services:
     # 環境変数
     environment:
       - NODE_ENV=development  # Node.js開発モード
+    
+    # 起動コマンド
+    command: sh -c "npm install && npm run dev -- --host 0.0.0.0"
 
 # 名前付きボリューム定義
 # データベースのデータを永続化するため
