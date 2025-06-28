@@ -10,8 +10,7 @@ function App() {
     posts,      // 投稿データの配列（例：[{id: 1, text: "投稿1"}, {id: 2, text: "投稿2"}]）
     loading,    // データ読み込み中かどうかを示すフラグ（true/false）
     error,      // エラーが発生した場合のエラーメッセージ
-    createPost, // 新しい投稿を作成する関数
-    refetch     // データを再取得する関数（今回は使用していないが将来の拡張用）
+    createPost  // 新しい投稿を作成する関数
   } = usePosts();
 
   // JSX（JavaScript XML）: HTMLに似た記法でUIを記述
