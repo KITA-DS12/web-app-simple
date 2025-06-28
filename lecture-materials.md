@@ -81,24 +81,24 @@ docker-compose up --build -d  # 再起動
 ```mermaid
 graph TB
     subgraph "🖥️ フロントエンド (localhost:5173)"
-        HTML["index.html - HTMLベース"]
-        MAIN["main.jsx - Reactエントリー"]
-        APP["App.jsx - メイン画面"]
-        POST["PostList.jsx - 投稿UI"]
-        HOOK["usePosts.js - 状態管理"]
-        API["posts.js - API通信"]
+        HTML["index.html#10;HTMLベース"]
+        MAIN["main.jsx#10;Reactエントリー"]
+        APP["App.jsx#10;メイン画面"]
+        POST["PostList.jsx#10;投稿UI"]
+        HOOK["usePosts.js#10;状態管理"]
+        API["posts.js#10;API通信"]
     end
 
     subgraph "🔧 サーバー (localhost:8000)"
-        FASTAPI["main.py - FastAPI起動"]
-        ROUTE["posts.py - APIルート"]
-        SERVICE["post_service.py - ビジネスロジック"]
-        REPO["repository.py - DB操作"]
+        FASTAPI["main.py#10;FastAPI起動"]
+        ROUTE["posts.py#10;APIルート"]
+        SERVICE["post_service.py#10;ビジネスロジック"]
+        REPO["repository.py#10;DB操作"]
     end
 
     subgraph "🗄️ データベース (localhost:5432)"
-        DB[("PostgreSQL - posts テーブル")]
-        SCHEMA["schema.sql - テーブル定義"]
+        DB[("PostgreSQL#10;posts テーブル")]
+        SCHEMA["schema.sql#10;テーブル定義"]
     end
 
     HTML --> MAIN
@@ -129,15 +129,15 @@ graph TB
 ```mermaid
 graph LR
     subgraph "Frontend"
-        A["見た目・操作\nHTML/CSS/JS\nReact/Vite"]
+        A["見た目・操作#10;HTML/CSS/JS#10;React/Vite"]
     end
     
     subgraph "Backend"
-        B["処理・制御\nPython/FastAPI"]
+        B["処理・制御#10;Python/FastAPI"]
     end
     
     subgraph "Database"
-        C["データ保存\nPostgreSQL"]
+        C["データ保存#10;PostgreSQL"]
     end
     
     A <-->|API| B
@@ -225,15 +225,15 @@ sequenceDiagram
 ```mermaid
 graph LR
     subgraph "Frontend"
-        A["見た目・操作\nHTML/CSS/JS\nReact/Vite"]
+        A["見た目・操作#10;HTML/CSS/JS#10;React/Vite"]
     end
     
     subgraph "Backend"
-        B["処理・制御\nPython/FastAPI"]
+        B["処理・制御#10;Python/FastAPI"]
     end
     
     subgraph "Database"
-        C["データ保存\nPostgreSQL"]
+        C["データ保存#10;PostgreSQL"]
     end
     
     A <-->|API| B
@@ -272,31 +272,31 @@ graph TB
     end
     
     subgraph "🎨 プレゼンテーション層"
-        P["App.jsx, PostList.jsx\nUI コンポーネント"]
+        P["App.jsx, PostList.jsx#10;UI コンポーネント"]
     end
     
     subgraph "🔄 アプリケーション層"
-        H["usePosts.js\nカスタムフック（状態管理）"]
+        H["usePosts.js#10;カスタムフック（状態管理）"]
     end
     
     subgraph "🌐 インフラ層"
-        I["posts.js\nAPI通信"]
+        I["posts.js#10;API通信"]
     end
     
     subgraph "🛣️ API層"
-        A["posts.py\nHTTPリクエスト/レスポンス処理"]
+        A["posts.py#10;HTTPリクエスト/レスポンス処理"]
     end
     
     subgraph "💼 サービス層（処理ルール層）"
-        S["post_service.py\nビジネスロジック（アプリのルール）"]
+        S["post_service.py#10;ビジネスロジック（アプリのルール）"]
     end
     
     subgraph "🗃️ リポジトリ層（データ保存層）"
-        R["repository.py\nデータベース操作"]
+        R["repository.py#10;データベース操作"]
     end
     
     subgraph "🗄️ データ層"
-        D[("PostgreSQL\nデータ永続化")]
+        D[("PostgreSQL#10;データ永続化")]
     end
     
     C --> P
@@ -888,19 +888,19 @@ graph TB
 graph TD
     subgraph "🏗️ フロントエンド設計パターン"
         subgraph "Container Component"
-            APP["App.jsx\n- データ管理\n- 状態保持\n- ビジネスロジック"]
+            APP["App.jsx#10;- データ管理#10;- 状態保持#10;- ビジネスロジック"]
         end
         
         subgraph "Custom Hook"
-            HOOK["usePosts.js\n- 状態管理\n- API通信\n- 副作用処理"]
+            HOOK["usePosts.js#10;- 状態管理#10;- API通信#10;- 副作用処理"]
         end
         
         subgraph "Presentational Component"
-            LIST["PostList.jsx\n- UI表示\n- ユーザー操作\n- フォーム管理"]
+            LIST["PostList.jsx#10;- UI表示#10;- ユーザー操作#10;- フォーム管理"]
         end
         
         subgraph "Service Layer"
-            API["posts.js\n- HTTP通信\n- データ変換\n- エラーハンドリング"]
+            API["posts.js#10;- HTTP通信#10;- データ変換#10;- エラーハンドリング"]
         end
         
         APP --> HOOK
@@ -934,15 +934,15 @@ graph TD
 graph LR
     subgraph "状態管理の階層"
         subgraph "アプリケーション状態"
-            GLOBAL["usePosts.js\n- posts: 投稿データ\n- loading: 読み込み状態\n- error: エラー情報"]
+            GLOBAL["usePosts.js#10;- posts: 投稿データ#10;- loading: 読み込み状態#10;- error: エラー情報"]
         end
         
         subgraph "コンポーネント状態"
-            LOCAL["PostList.jsx\n- text: 入力テキスト\n- creating: 作成中フラグ\n- createError: 作成エラー"]
+            LOCAL["PostList.jsx#10;- text: 入力テキスト#10;- creating: 作成中フラグ#10;- createError: 作成エラー"]
         end
         
         subgraph "派生状態"
-            DERIVED["計算結果\n- posts.length\n- text.length\n- isEmpty"]
+            DERIVED["計算結果#10;- posts.length#10;- text.length#10;- isEmpty"]
         end
         
         GLOBAL -.->|props| LOCAL
@@ -1023,15 +1023,15 @@ sequenceDiagram
 graph TD
     subgraph "エラーハンドリングの階層"
         subgraph "🎨 UI層"
-            UI_ERROR["PostList.jsx\n- フォームバリデーション\n- ユーザー向けメッセージ表示"]
+            UI_ERROR["PostList.jsx#10;- フォームバリデーション#10;- ユーザー向けメッセージ表示"]
         end
         
         subgraph "🔄 ロジック層"
-            LOGIC_ERROR["usePosts.js\n- API通信エラーキャッチ\n- 状態の整合性保持"]
+            LOGIC_ERROR["usePosts.js#10;- API通信エラーキャッチ#10;- 状態の整合性保持"]
         end
         
         subgraph "🌐 通信層"
-            API_ERROR["posts.js\n- HTTPエラーハンドリング\n- レスポンス検証"]
+            API_ERROR["posts.js#10;- HTTPエラーハンドリング#10;- レスポンス検証"]
         end
         
         UI_ERROR --> LOGIC_ERROR
@@ -1082,15 +1082,15 @@ graph TD
 graph LR
     subgraph "テスト戦略"
         subgraph "単体テスト"
-            UNIT["Pure Components\n- PostList (propsのみ)\n- 純粋関数"]
+            UNIT["Pure Components#10;- PostList (propsのみ)#10;- 純粋関数"]
         end
         
         subgraph "統合テスト"
-            INTEGRATION["Custom Hooks\n- usePosts\n- API通信を含む"]
+            INTEGRATION["Custom Hooks#10;- usePosts#10;- API通信を含む"]
         end
         
         subgraph "E2Eテスト"
-            E2E["全体フロー\n- ユーザー操作\n- 実際のAPI通信"]
+            E2E["全体フロー#10;- ユーザー操作#10;- 実際のAPI通信"]
         end
     end
     
@@ -1877,28 +1877,28 @@ http://localhost:8000/docs にアクセスして：
 ```mermaid
 graph TB
     subgraph "フロントエンド"
-        A["App.jsx\nメインコンポーネント"]
-        A1["PostList.jsx\nUI コンポーネント"]
-        A2["usePosts.js\nカスタムフック"]
-        A3["posts.js\nAPI 通信層"]
-        A4["vite.config.js\n開発環境設定"]
+        A["App.jsx#10;メインコンポーネント"]
+        A1["PostList.jsx#10;UI コンポーネント"]
+        A2["usePosts.js#10;カスタムフック"]
+        A3["posts.js#10;API 通信層"]
+        A4["vite.config.js#10;開発環境設定"]
     end
     
     subgraph "バックエンド"
-        B["main.py\nエントリーポイント"]
-        B1["posts.py\nAPI エンドポイント（URL定義）"]
-        B2["post_service.py\nビジネスロジック層（処理ルール）"]
-        B3["repository.py\nデータアクセス層"]
-        B4["config.py\n設定管理"]
+        B["main.py#10;エントリーポイント"]
+        B1["posts.py#10;API エンドポイント（URL定義）"]
+        B2["post_service.py#10;ビジネスロジック層（処理ルール）"]
+        B3["repository.py#10;データアクセス層"]
+        B4["config.py#10;設定管理"]
     end
     
     subgraph "データベース"
         C[("PostgreSQL")]
-        C1["posts テーブル\nschema.sql"]
+        C1["posts テーブル#10;schema.sql"]
     end
     
     subgraph "インフラ"
-        D["docker-compose.yml\nサービス連携"]
+        D["docker-compose.yml#10;サービス連携"]
     end
     
     A <-->|REST API| B
