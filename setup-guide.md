@@ -529,9 +529,27 @@ CMD ["uvicorn", "app.main:app", "--host", "0.0.0.0", "--port", "8000", "--reload
 
 ## 🎨 4. フロントエンド（React）の構築
 
-### 4.1 package.json の作成
+### 4.1 React プロジェクトのセットアップ
 
-**ファイル作成**: `client/package.json`
+```bash
+# client ディレクトリに移動
+cd client
+
+# Vite を使って React プロジェクトを作成
+npm create vite@latest . -- --template react
+
+# 依存関係をインストール
+npm install
+
+# 開発サーバーが起動することを確認（一旦テスト）
+npm run dev
+# Ctrl+C で停止
+
+# client ディレクトリから抜ける
+cd ..
+```
+
+**生成された package.json を確認:**
 
 ```json
 {
@@ -557,9 +575,9 @@ CMD ["uvicorn", "app.main:app", "--host", "0.0.0.0", "--port", "8000", "--reload
 }
 ```
 
-### 4.2 Vite 設定
+### 4.2 Vite 設定の修正
 
-**ファイル作成**: `client/vite.config.js`
+**ファイル編集**: `client/vite.config.js`（既存ファイルを以下に置き換え）
 
 ```javascript
 import { defineConfig } from 'vite'
@@ -584,9 +602,9 @@ export default defineConfig({
 })
 ```
 
-### 4.3 HTML エントリーポイント
+### 4.3 HTML エントリーポイントの修正
 
-**ファイル作成**: `client/index.html`
+**ファイル編集**: `client/index.html`（既存ファイルを以下に置き換え）
 
 ```html
 <!doctype html>
@@ -606,9 +624,9 @@ export default defineConfig({
 </html>
 ```
 
-### 4.4 React エントリーポイント
+### 4.4 React エントリーポイントの修正
 
-**ファイル作成**: `client/src/main.jsx`
+**ファイル編集**: `client/src/main.jsx`（既存ファイルを以下に置き換え）
 
 ```javascript
 // React アプリケーションのエントリーポイント
@@ -883,9 +901,9 @@ export function PostList({ posts, loading, error, onCreatePost }) {
 }
 ```
 
-### 4.8 メインアプリコンポーネント
+### 4.8 メインアプリコンポーネントの修正
 
-**ファイル作成**: `client/src/App.jsx`
+**ファイル編集**: `client/src/App.jsx`（既存ファイルを以下に置き換え）
 
 ```javascript
 // アプリケーション全体のメインコンポーネント
@@ -1117,114 +1135,6 @@ docker-compose logs client  # クライアントログ確認
 
 ---
 
-## 📝 7. 最終チェックリスト
+**🎉 完成！** 
 
-### 7.1 ファイル構造の確認
-
-```bash
-# 最終的なプロジェクト構造
-tree web-app-simple
-```
-
-期待される構造:
-```
-web-app-simple/
-├── .gitignore
-├── README.md                    # プロジェクト説明
-├── setup-guide.md              # このガイド
-├── client/                      # React フロントエンド
-│   ├── Dockerfile.dev
-│   ├── index.html
-│   ├── package.json
-│   ├── src/
-│   │   ├── App.jsx
-│   │   ├── main.jsx
-│   │   ├── api/
-│   │   │   └── posts.js
-│   │   ├── components/
-│   │   │   └── PostList.jsx
-│   │   └── hooks/
-│   │       └── usePosts.js
-│   └── vite.config.js
-├── server/                      # FastAPI バックエンド
-│   ├── Dockerfile.dev
-│   ├── requirements.txt
-│   └── app/
-│       ├── main.py
-│       ├── api/
-│       │   └── v1/
-│       │       └── posts.py
-│       ├── core/
-│       │   └── config.py
-│       ├── db/
-│       │   ├── repository.py
-│       │   └── schema.sql
-│       └── services/
-│           └── post_service.py
-└── infra/                       # Docker設定
-    └── docker-compose.yml
-```
-
-### 7.2 機能チェック
-
-- [ ] フロントエンド（http://localhost:5173）が正常に表示される
-- [ ] 投稿作成フォームが動作する
-- [ ] 投稿一覧が表示される
-- [ ] バックエンドAPI（http://localhost:8000/docs）にアクセスできる
-- [ ] データベースに投稿データが保存される
-
-### 7.3 開発環境チェック
-
-- [ ] ファイル変更時にホットリロードが動作する
-- [ ] エラーメッセージが適切に表示される
-- [ ] Docker コンテナが正常に起動している
-
----
-
-## 🎯 8. 次のステップ
-
-このベースアプリが完成したら、以下の機能拡張にチャレンジしてみましょう：
-
-### 8.1 基本機能の追加
-- 投稿の削除機能
-- 投稿の編集機能
-- 投稿の検索機能
-
-### 8.2 UI/UX の改善
-- CSS フレームワーク（Tailwind CSS等）の導入
-- レスポンシブデザイン
-- ローディングアニメーション
-
-### 8.3 高度な機能
-- ユーザー認証・認可
-- 投稿の画像添付
-- いいね機能
-- コメント機能
-
-### 8.4 インフラストラクチャ
-- 本番環境へのデプロイ
-- CI/CD パイプライン
-- テストの自動化
-
----
-
-## 💡 学習のポイント
-
-1. **段階的な理解**: 一度に全てを理解しようとせず、各レイヤーごとに理解を深める
-2. **実際に手を動かす**: コードをコピーするだけでなく、変更して動作を確認する
-3. **エラーに慣れる**: エラーメッセージを読んで問題を特定する習慣をつける
-4. **ログの活用**: `docker-compose logs` でアプリケーションの動作を確認する
-
----
-
-## 📚 参考資料
-
-- [FastAPI 公式ドキュメント](https://fastapi.tiangolo.com/)
-- [React 公式ドキュメント](https://react.dev/)
-- [Vite 公式ドキュメント](https://vitejs.dev/)
-- [Docker Compose 公式ドキュメント](https://docs.docker.com/compose/)
-- [PostgreSQL 公式ドキュメント](https://www.postgresql.org/docs/)
-
-**🎉 おめでとうございます！** 
-
-これで0からWeb アプリケーションを構築する基本的な手順を習得しました。実際にコードを書きながら、Web開発の全体像を理解することができたはずです。
+これで0からシンプルな投稿アプリを構築する手順が完了しました。各ステップを順番に実行することで、FastAPI + React + PostgreSQL のフルスタックWebアプリケーションが動作するはずです。
