@@ -447,7 +447,24 @@ async def create_post(post_data: PostCreate):
         raise HTTPException(status_code=500, detail=f"投稿作成エラー: {str(e)}")
 ```
 
-### 3.7 メインアプリケーション
+### 3.7 バックエンド用Dockerfile作成
+
+**ファイル作成**: `server/Dockerfile.dev`
+
+```dockerfile
+FROM python:3.11-slim
+
+WORKDIR /app
+
+COPY requirements.txt .
+RUN pip install --no-cache-dir -r requirements.txt
+
+COPY . .
+
+CMD ["uvicorn", "app.main:app", "--host", "0.0.0.0", "--port", "8000", "--reload"]
+```
+
+### 3.8 メインアプリケーション
 
 **ファイル作成**: `server/app/main.py`
 
@@ -880,7 +897,26 @@ export function PostList({ posts, loading, error, onCreatePost }) {
 }
 ```
 
-### 4.8 メインアプリコンポーネントの修正
+### 4.8 フロントエンド用Dockerfile作成
+
+**ファイル作成**: `client/Dockerfile.dev`
+
+```dockerfile
+FROM node:18-alpine
+
+WORKDIR /app
+
+COPY package*.json ./
+RUN npm install
+
+COPY . .
+
+EXPOSE 5173
+
+CMD ["npm", "run", "dev", "--", "--host", "0.0.0.0"]
+```
+
+### 4.9 メインアプリコンポーネントの修正
 
 **ファイル編集**: `client/src/App.jsx`（既存ファイルを以下に置き換え）
 
@@ -969,11 +1005,10 @@ services:
 
   # バックエンドサーバー（FastAPI）
   server:
-    # Python 3.11 slim イメージを使用
-    image: python:3.11-slim
-    
-    # 作業ディレクトリ
-    working_dir: /app
+    # Dockerfileからイメージをビルド
+    build:
+      context: ../server        # ビルドコンテキスト（Dockerfileがある場所）
+      dockerfile: Dockerfile.dev  # 開発用Dockerfile
     
     # ボリューム（ホットリロード対応）
     volumes:
@@ -985,7 +1020,6 @@ services:
       # データベース接続文字列（サービス名'db'でアクセス可能）
       DATABASE_URL: postgresql://postgres:password@db:5432/app
       DEBUG: "true"   # デバッグモード有効
-      PYTHONUNBUFFERED: "1"  # Python出力のバッファリング無効化
     
     # ポート設定
     ports:
@@ -996,16 +1030,17 @@ services:
       db:
         condition: service_healthy  # dbのヘルスチェックが成功するまで待機
     
-    # 起動コマンド
-    command: sh -c "pip install -r requirements.txt && uvicorn app.main:app --host 0.0.0.0 --port 8000 --reload"
+    # コンテナ起動時に実行するコマンド
+    # uvicorn: Python ASGI サーバー
+    # --reload: ファイル変更時の自動再起動
+    command: uvicorn app.main:app --host 0.0.0.0 --port 8000 --reload
 
   # フロントエンドクライアント（React + Vite）
   client:
-    # Node.js 18 Alpine イメージを使用
-    image: node:18-alpine
-    
-    # 作業ディレクトリ
-    working_dir: /app
+    # Dockerfileからイメージをビルド
+    build:
+      context: ../client        # ビルドコンテキスト
+      dockerfile: Dockerfile.dev  # 開発用Dockerfile
     
     # ボリューム（ホットリロード対応）
     volumes:
@@ -1019,9 +1054,6 @@ services:
     # 環境変数
     environment:
       - NODE_ENV=development  # Node.js開発モード
-    
-    # 起動コマンド
-    command: sh -c "npm install && npm run dev -- --host 0.0.0.0"
 
 # 名前付きボリューム定義
 # データベースのデータを永続化するため
