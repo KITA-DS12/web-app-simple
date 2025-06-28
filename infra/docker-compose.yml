@@ -1,0 +1,91 @@
+
+# Docker Compose設定ファイル
+# 開発環境で必要な3つのサービス（データベース、サーバー、クライアント）を定義
+# 各サービスは独立したコンテナとして実行され、相互に通信可能
+
+services:
+  # データベースサービス（PostgreSQL）
+  db:
+    # Docker Hub から PostgreSQL 15 Alpine版のイメージを使用
+    # Alpine: 軽量なLinuxディストリビューション
+    image: postgres:15-alpine
+    
+    # 環境変数でデータベースの初期設定を行う
+    environment:
+      POSTGRES_USER: postgres      # データベースユーザー名
+      POSTGRES_PASSWORD: password  # データベースパスワード
+      POSTGRES_DB: app            # 作成するデータベース名
+    
+    # ボリューム（データの永続化）
+    volumes:
+      # postgres_data という名前付きボリュームにデータを保存
+      # コンテナを削除してもデータが残る
+      - postgres_data:/var/lib/postgresql/data
+    
+    # ポート設定：ホスト:コンテナ
+    ports:
+      - "5432:5432"  # PostgreSQLの標準ポート5432をホストからもアクセス可能に
+    
+    # ヘルスチェック：サービスが正常に動作しているかを確認
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres"]  # PostgreSQLが接続可能かチェック
+      interval: 5s   # 5秒間隔でチェック
+      timeout: 5s    # 5秒でタイムアウト
+      retries: 5     # 5回まで再試行
+
+  # バックエンドサーバー（FastAPI）
+  server:
+    # Dockerfileからイメージをビルド
+    build:
+      context: ../server        # ビルドコンテキスト（Dockerfileがある場所）
+      dockerfile: Dockerfile.dev  # 開発用Dockerfile
+    
+    # ボリューム（ホットリロード対応）
+    volumes:
+      - ../server:/app  # ホストのserverディレクトリをコンテナの/appにマウント
+                       # ファイル変更時に自動でサーバーが再起動される
+    
+    # 環境変数
+    environment:
+      # データベース接続文字列（サービス名'db'でアクセス可能）
+      DATABASE_URL: postgresql://postgres:password@db:5432/app
+      DEBUG: "true"   # デバッグモード有効
+    
+    # ポート設定
+    ports:
+      - "8000:8000"  # FastAPIサーバーのポート8000をホストからアクセス可能に
+    
+    # 依存関係：dbサービスが健全な状態になってから起動
+    depends_on:
+      db:
+        condition: service_healthy  # dbのヘルスチェックが成功するまで待機
+    
+    # コンテナ起動時に実行するコマンド
+    # uvicorn: Python ASGI サーバー
+    # --reload: ファイル変更時の自動再起動
+    command: uvicorn app.main:app --host 0.0.0.0 --port 8000 --reload
+
+  # フロントエンドクライアント（React + Vite）
+  client:
+    # Dockerfileからイメージをビルド
+    build:
+      context: ../client        # ビルドコンテキスト
+      dockerfile: Dockerfile.dev  # 開発用Dockerfile
+    
+    # ボリューム（ホットリロード対応）
+    volumes:
+      - ../client:/app        # ホストのclientディレクトリをマウント
+      - /app/node_modules     # node_modulesは匿名ボリューム（コンテナ内のものを優先）
+    
+    # ポート設定
+    ports:
+      - "5173:5173"  # Viteの開発サーバーポート5173をホストからアクセス可能に
+    
+    # 環境変数
+    environment:
+      - NODE_ENV=development  # Node.js開発モード
+
+# 名前付きボリューム定義
+# データベースのデータを永続化するため
+volumes:
+  postgres_data:  # PostgreSQLデータ用の永続ボリューム
