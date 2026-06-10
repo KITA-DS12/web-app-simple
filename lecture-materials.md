@@ -4,19 +4,19 @@
 
 ---
 
-## 📚 講座の流れ
+## 講座の流れ
 
-**⚠️ 初学者の方へ：まず「1. アプリを動かしてみよう」で実際の動作を確認してから始めてください！**
+**初学者の方へ：まず「1. アプリを動かしてみよう」で実際の動作を確認してから始めてください！**
 
-1. **🚀 アプリを動かしてみよう**　← まずはここから！
-2. **🏗️ アーキテクチャを理解しよう**　← 全体像を把握！
-3. **🎨 フロントエンドのコードを読んでいこう**
-4. **⚙️ バックエンドのコードを読んでいこう**
-5. **🚀 実践演習：投稿削除機能を実装してみよう**
+1. **アプリを動かしてみよう**　← まずはここから！
+2. **アーキテクチャを理解しよう**　← 全体像を把握！
+3. **フロントエンドのコードを読んでいこう**
+4. **バックエンドのコードを読んでいこう**
+5. **実践演習：投稿削除機能を実装してみよう**
 
 ---
 
-## 🚀 1. アプリを動かしてみよう
+## 1. アプリを動かしてみよう
 
 ### 1.1 必要なツールの準備（Mac向け）
 
@@ -31,11 +31,11 @@ docker --version
 docker-compose --version
 ```
 
-⚠️ **注意**: Docker Desktop の初回起動時は管理者権限が必要です。パスワード入力を求められた場合は入力してください。
+**注意**: Docker Desktop の初回起動時は管理者権限が必要です。パスワード入力を求められた場合は入力してください。
 
 ### 1.2 アプリを起動してみよう
 
-⚠️ **初回起動時の注意**
+**初回起動時の注意**
 - 初回起動時はDockerイメージのダウンロードに時間がかかります（5-10分程度）
 - データベースの初期化も自動で行われます
 
@@ -62,7 +62,7 @@ docker-compose up --build -d  # 再起動
 
 1. **フロントエンド（画面）**: http://localhost:5173
    - 投稿アプリの画面が表示される
-   
+
 2. **バックエンド（API）**: http://localhost:8000/docs
    - API の仕様書が表示される
 
@@ -72,7 +72,7 @@ docker-compose up --build -d  # 再起動
 2. 何か文字を入力して「投稿」ボタンを押す
 3. 投稿が一覧に表示されることを確認
 
-**🎯 ここで体験できること：**
+**ここで体験できること：**
 - フロントエンド → バックエンド → データベースの連携
 - リアルタイムでのデータ反映
 
@@ -80,7 +80,7 @@ docker-compose up --build -d  # 再起動
 
 ```mermaid
 graph TB
-    subgraph "🖥️ フロントエンド (localhost:5173)"
+    subgraph "フロントエンド (localhost:5173)"
         HTML["index.html#10;HTMLベース"]
         MAIN["main.jsx#10;Reactエントリー"]
         APP["App.jsx#10;メイン画面"]
@@ -89,14 +89,14 @@ graph TB
         API["posts.js#10;API通信"]
     end
 
-    subgraph "🔧 サーバー (localhost:8000)"
+    subgraph "サーバー (localhost:8000)"
         FASTAPI["main.py#10;FastAPI起動"]
         ROUTE["posts.py#10;APIルート"]
         SERVICE["post_service.py#10;ビジネスロジック"]
         REPO["repository.py#10;DB操作"]
     end
 
-    subgraph "🗄️ データベース (localhost:5432)"
+    subgraph "データベース (localhost:5432)"
         DB[("PostgreSQL#10;posts テーブル")]
         SCHEMA["schema.sql#10;テーブル定義"]
     end
@@ -106,19 +106,19 @@ graph TB
     APP --> POST
     POST --> HOOK
     HOOK --> API
-    
+
     API -.->|HTTP Request| FASTAPI
     FASTAPI --> ROUTE
     ROUTE --> SERVICE
     SERVICE --> REPO
     REPO --> DB
-    
+
     SCHEMA --> DB
-    
+
     classDef frontend fill:#4A90E2,stroke:#357ABD,color:#FFFFFF
     classDef backend fill:#50C878,stroke:#3B9C5F,color:#FFFFFF
     classDef database fill:#FF6B6B,stroke:#CC5555,color:#FFFFFF
-    
+
     class HTML,MAIN,APP,POST,HOOK,API frontend
     class FASTAPI,ROUTE,SERVICE,REPO backend
     class DB,SCHEMA database
@@ -131,22 +131,22 @@ graph LR
     subgraph "Frontend"
         A["見た目・操作#10;HTML/CSS/JS#10;React/Vite"]
     end
-    
+
     subgraph "Backend"
         B["処理・制御#10;Python/FastAPI"]
     end
-    
+
     subgraph "Database"
         C["データ保存#10;PostgreSQL"]
     end
-    
+
     A <-->|API| B
     B <-->|SQL| C
-    
+
     classDef frontend fill:#4A90E2,stroke:#357ABD,color:#FFFFFF
     classDef backend fill:#50C878,stroke:#3B9C5F,color:#FFFFFF
     classDef database fill:#FF6B6B,stroke:#CC5555,color:#FFFFFF
-    
+
     class A frontend
     class B backend
     class C database
@@ -169,16 +169,16 @@ graph LR
 
 ```mermaid
 sequenceDiagram
-    participant U as 👤 ユーザー
-    participant UI as 🎨 PostList.jsx
-    participant H as 🔄 usePosts.js
-    participant A as 🌐 posts.js
-    participant F as ⚡ FastAPI
-    participant S as 💼 Service
-    participant R as 🗃️ Repository
-    participant D as 🗄️ PostgreSQL
+    participant U as ユーザー
+    participant UI as PostList.jsx
+    participant H as usePosts.js
+    participant A as posts.js
+    participant F as FastAPI
+    participant S as Service
+    participant R as Repository
+    participant D as PostgreSQL
 
-    Note over U,D: 📝 新規投稿作成の流れ
+    Note over U,D: 新規投稿作成の流れ
 
     U->>UI: 1. テキスト入力 & 投稿ボタンクリック
     UI->>H: 2. createPost(text) 呼び出し
@@ -196,7 +196,7 @@ sequenceDiagram
     H-->>UI: 14. 新しいposts配列
     UI->>UI: 15. 画面に新投稿を表示
 
-    Note over U,D: 📋 投稿一覧取得の流れ
+    Note over U,D: 投稿一覧取得の流れ
 
     U->>UI: 1. 画面読み込み
     H->>A: 2. postsApi.getAll() 呼び出し
@@ -216,7 +216,7 @@ sequenceDiagram
 
 ---
 
-## 🏗️ 2. アーキテクチャを理解しよう
+## 2. アーキテクチャを理解しよう
 
 **このセクションの目的：** コードを読む前に、アプリ全体がどのように構成されているかを理解しましょう。
 
@@ -227,22 +227,22 @@ graph LR
     subgraph "Frontend"
         A["見た目・操作#10;HTML/CSS/JS#10;React/Vite"]
     end
-    
+
     subgraph "Backend"
         B["処理・制御#10;Python/FastAPI"]
     end
-    
+
     subgraph "Database"
         C["データ保存#10;PostgreSQL"]
     end
-    
+
     A <-->|API| B
     B <-->|SQL| C
-    
+
     classDef frontend fill:#4A90E2,stroke:#357ABD,color:#FFFFFF
     classDef backend fill:#50C878,stroke:#3B9C5F,color:#FFFFFF
     classDef database fill:#FF6B6B,stroke:#CC5555,color:#FFFFFF
-    
+
     class A frontend
     class B backend
     class C database
@@ -270,35 +270,35 @@ graph TB
     subgraph "クライアント層"
         C["ブラウザ/アプリ"]
     end
-    
-    subgraph "🎨 プレゼンテーション層"
+
+    subgraph "プレゼンテーション層"
         P["App.jsx, PostList.jsx#10;UI コンポーネント"]
     end
-    
-    subgraph "🔄 アプリケーション層"
+
+    subgraph "アプリケーション層"
         H["usePosts.js#10;カスタムフック（状態管理）"]
     end
-    
-    subgraph "🌐 インフラ層"
+
+    subgraph "インフラ層"
         I["posts.js#10;API通信"]
     end
-    
-    subgraph "🛣️ API層"
+
+    subgraph "API層"
         A["posts.py#10;HTTPリクエスト/レスポンス処理"]
     end
-    
-    subgraph "💼 サービス層（処理ルール層）"
+
+    subgraph "サービス層（処理ルール層）"
         S["post_service.py#10;ビジネスロジック（アプリのルール）"]
     end
-    
-    subgraph "🗃️ リポジトリ層（データ保存層）"
+
+    subgraph "リポジトリ層（データ保存層）"
         R["repository.py#10;データベース操作"]
     end
-    
-    subgraph "🗄️ データ層"
+
+    subgraph "データ層"
         D[("PostgreSQL#10;データ永続化")]
     end
-    
+
     C --> P
     P --> H
     H --> I
@@ -306,14 +306,14 @@ graph TB
     A --> S
     S --> R
     R -->|SQL| D
-    
+
     classDef client fill:#3498db,stroke:#2c3e50,color:#fff
     classDef frontend fill:#4A90E2,stroke:#357ABD,color:#fff
     classDef api fill:#e74c3c,stroke:#c0392b,color:#fff
     classDef service fill:#2ecc71,stroke:#27ae60,color:#fff
     classDef repo fill:#f39c12,stroke:#d68910,color:#fff
     classDef db fill:#9b59b6,stroke:#8e44ad,color:#fff
-    
+
     class C client
     class P,H,I frontend
     class A api
@@ -326,13 +326,13 @@ graph TB
 
 | 層 | 責任 | 実際のファイル | 何をする？ |
 |----|----|-------------|----------|
-| **🎨 プレゼンテーション層** | 画面表示・ユーザー操作 | `App.jsx`, `PostList.jsx` | ボタン、フォーム、一覧表示 |
-| **🔄 アプリケーション層** | 状態管理・画面ロジック | `usePosts.js` | データの保持、画面状態の管理 |
-| **🌐 インフラ層** | 外部通信 | `posts.js` | サーバーとの HTTP 通信 |
-| **🛣️ API層** | HTTP処理 | `posts.py` | URLのルーティング、リクエスト処理 |
-| **💼 サービス層** | ビジネスロジック | `post_service.py` | アプリのルール（文字数制限など） |
-| **🗃️ リポジトリ層** | データアクセス | `repository.py` | SQL実行、データベース操作 |
-| **🗄️ データ層** | データ永続化 | `schema.sql`, PostgreSQL | データの保存・管理 |
+| **プレゼンテーション層** | 画面表示・ユーザー操作 | `App.jsx`, `PostList.jsx` | ボタン、フォーム、一覧表示 |
+| **アプリケーション層** | 状態管理・画面ロジック | `usePosts.js` | データの保持、画面状態の管理 |
+| **インフラ層** | 外部通信 | `posts.js` | サーバーとの HTTP 通信 |
+| **API層** | HTTP処理 | `posts.py` | URLのルーティング、リクエスト処理 |
+| **サービス層** | ビジネスロジック | `post_service.py` | アプリのルール（文字数制限など） |
+| **リポジトリ層** | データアクセス | `repository.py` | SQL実行、データベース操作 |
+| **データ層** | データ永続化 | `schema.sql`, PostgreSQL | データの保存・管理 |
 
 **なぜ分けるの？**
 - **責任の分離**: 各層が専門的な役割を持つ
@@ -344,53 +344,53 @@ graph TB
 
 ```
 web-app-simple/
-├── 📁 client/                    # 🎨 フロントエンド全体
+├── client/                    # フロントエンド全体
 │   ├── src/
-│   │   ├── App.jsx              # 🎨 プレゼンテーション層
+│   │   ├── App.jsx              # プレゼンテーション層
 │   │   ├── components/
-│   │   │   └── PostList.jsx     # 🎨 プレゼンテーション層
+│   │   │   └── PostList.jsx     # プレゼンテーション層
 │   │   ├── hooks/
-│   │   │   └── usePosts.js      # 🔄 アプリケーション層
+│   │   │   └── usePosts.js      # アプリケーション層
 │   │   └── api/
-│   │       └── posts.js         # 🌐 インフラ層
-├── 📁 server/                    # ⚙️ バックエンド全体
+│   │       └── posts.js         # インフラ層
+├── server/                    # バックエンド全体
 │   ├── app/
-│   │   ├── main.py              # 🛣️ API層（エントリーポイント）
+│   │   ├── main.py              # API層（エントリーポイント）
 │   │   ├── api/v1/
-│   │   │   └── posts.py         # 🛣️ API層
+│   │   │   └── posts.py         # API層
 │   │   ├── services/
-│   │   │   └── post_service.py  # 💼 サービス層
+│   │   │   └── post_service.py  # サービス層
 │   │   ├── db/
-│   │   │   ├── repository.py    # 🗃️ リポジトリ層
-│   │   │   └── schema.sql       # 🗄️ データ層
-└── 📁 infra/
-    └── docker-compose.yml       # 🔧 インフラ設定
+│   │   │   ├── repository.py    # リポジトリ層
+│   │   │   └── schema.sql       # データ層
+└── infra/
+    └── docker-compose.yml       # インフラ設定
 ```
 
-**🎯 これから読む順序：**
+**これから読む順序：**
 1. **フロントエンド**（上から下へ）: `App.jsx` → `PostList.jsx` → `usePosts.js` → `posts.js`
 2. **バックエンド**（上から下へ）: `main.py` → `posts.py` → `post_service.py` → `repository.py` → `schema.sql`
 
 ---
 
-## 🎨 3. フロントエンドのコードを読んでいこう
+## 3. フロントエンドのコードを読んでいこう
 
 ### 3.1 フロントエンドのファイル構造
 
 ```mermaid
 graph TD
-    subgraph "📁 client/"
+    subgraph "client/"
         HTML[index.html]
-        subgraph "📁 src/"
+        subgraph "src/"
             MAIN[main.jsx]
             APP[App.jsx]
-            subgraph "📁 components/"
+            subgraph "components/"
                 POSTLIST[PostList.jsx]
             end
-            subgraph "📁 hooks/"
+            subgraph "hooks/"
                 USEPOSTS[usePosts.js]
             end
-            subgraph "📁 api/"
+            subgraph "api/"
                 POSTS[posts.js]
             end
         end
@@ -406,12 +406,12 @@ graph TD
 
     classDef important fill:#FFE6E6,stroke:#FF4444,color:#000
     classDef config fill:#E6F3FF,stroke:#4444FF,color:#000
-    
+
     class MAIN,APP,POSTLIST,USEPOSTS,POSTS important
     class PKG,VITE config
 ```
 
-**🔍 読む順序：** `index.html` → `main.jsx` → `App.jsx` → `PostList.jsx` → `usePosts.js` → `posts.js`
+**読む順序：** `index.html` → `main.jsx` → `App.jsx` → `PostList.jsx` → `usePosts.js` → `posts.js`
 
 ### 3.2 index.html - Webアプリの土台
 
@@ -435,7 +435,7 @@ graph TD
 </html>
 ```
 
-**🎯 重要ポイント：**
+**重要ポイント：**
 - `<div id="root"></div>` : React アプリが描画される場所
 - `<script type="module" src="/src/main.jsx"></script>` : React アプリの開始点
 - シンプルな HTML 構造で、実際のコンテンツは React が動的に生成
@@ -457,7 +457,7 @@ ReactDOM.createRoot(document.getElementById('root')).render(
 )
 ```
 
-**🎯 重要ポイント：**
+**重要ポイント：**
 - `ReactDOM.createRoot()` : React 18 の新しい API で React アプリを初期化
 - `React.StrictMode` : 開発時の潜在的な問題を検出するモード
 - `<App />` : メインコンポーネントを描画
@@ -475,7 +475,7 @@ import { usePosts } from './hooks/usePosts';        // 投稿データを管理�
 function App() {
   // usePosts カスタムフックから投稿に関する機能を取得
   // これにより、投稿データの状態管理とAPI通信が自動で行われる
-  const { 
+  const {
     posts,      // 投稿データの配列（例：[{id: 1, text: "投稿1"}, {id: 2, text: "投稿2"}]）
     loading,    // データ読み込み中かどうかを示すフラグ（true/false）
     error,      // エラーが発生した場合のエラーメッセージ
@@ -488,9 +488,9 @@ function App() {
     <div style={{ padding: '20px' }}>
       {/* アプリケーションのタイトル */}
       <h1>FastAPI + React Posts App</h1>
-      
+
       {/* PostListコンポーネントに必要なデータと機能を渡す（propsという仕組み） */}
-      <PostList 
+      <PostList
         posts={posts}                    // 投稿データを子コンポーネントに渡す
         loading={loading}                // 読み込み状態を子コンポーネントに渡す
         error={error}                    // エラー情報を子コンポーネントに渡す
@@ -504,7 +504,7 @@ function App() {
 export default App;
 ```
 
-**🎯 処理の流れ：**
+**処理の流れ：**
 
 ```mermaid
 graph LR
@@ -542,7 +542,7 @@ export function PostList({ posts, loading, error, onCreatePost }) {
   const handleSubmit = async (e) => {
     // preventDefault(): フォーム送信のデフォルト動作（ページリロード）を止める
     e.preventDefault();
-    
+
     // 入力値のバリデーション（検証）
     // trim(): 文字列の前後の空白を除去。空文字だけの場合は false になる
     if (!text.trim()) {
@@ -559,17 +559,17 @@ export function PostList({ posts, loading, error, onCreatePost }) {
     // 投稿作成処理の開始
     setCreating(true);      // 作成中フラグを true に（ボタンを無効化するため）
     setCreateError('');     // 前回のエラーメッセージをクリア
-    
+
     // await: 非同期処理の完了を待つ。onCreatePost は親から受け取った投稿作成関数
     const result = await onCreatePost(text);
-    
+
     // 投稿作成の結果によって処理を分岐
     if (result.success) {
       setText('');  // 成功時：入力フォームをクリア
     } else {
       setCreateError(result.error);  // 失敗時：エラーメッセージを表示
     }
-    
+
     setCreating(false);  // 作成中フラグを false に戻す
   };
 
@@ -591,8 +591,8 @@ export function PostList({ posts, loading, error, onCreatePost }) {
             value={text}                          // 現在の入力値（state で管理）
             onChange={(e) => setText(e.target.value)}  // 入力値が変わった時の処理
             placeholder="投稿内容を入力"            // 未入力時に表示されるヒント
-            style={{ 
-              width: '300px', 
+            style={{
+              width: '300px',
               padding: '8px',
               marginRight: '10px'
             }}
@@ -635,7 +635,7 @@ export function PostList({ posts, loading, error, onCreatePost }) {
 }
 ```
 
-**🎯 PostList.jsx の処理流れ：**
+**PostList.jsx の処理流れ：**
 
 ```mermaid
 graph TD
@@ -644,7 +644,7 @@ graph TD
         B -->|"loading=true"| C[読み込み中表示]
         B -->|"error あり"| D[エラー表示]
         B -->|正常| E["フォーム + 投稿一覧表示"]
-        
+
         E --> F[ユーザー入力]
         F --> G[handleSubmit実行]
         G --> H[バリデーション]
@@ -679,10 +679,10 @@ export function usePosts() {
     try {
       // try-catch 文：エラーが発生する可能性のある処理を安全に実行
       setLoading(true);  // 読み込み開始
-      
+
       // API から投稿データを取得（await で完了を待つ）
       const data = await postsApi.getAll();
-      
+
       setPosts(data);    // 取得したデータで状態を更新
       setError(null);    // エラーをクリア
     } catch (err) {
@@ -699,11 +699,11 @@ export function usePosts() {
     try {
       // API に新しい投稿を送信
       const newPost = await postsApi.create(text);
-      
+
       // スプレッド演算子（...）を使って新しい投稿を配列の先頭に追加
       // [newPost, ...posts] は [新しい投稿, 既存の投稿1, 既存の投稿2, ...] という配列になる
       setPosts([newPost, ...posts]);
-      
+
       // 成功時は success: true を返す
       return { success: true };
     } catch (err) {
@@ -729,7 +729,7 @@ export function usePosts() {
 }
 ```
 
-**🎯 usePosts.js の処理流れ：**
+**usePosts.js の処理流れ：**
 
 ```mermaid
 graph TD
@@ -739,11 +739,11 @@ graph TD
         C --> D[postsApi.getAll 呼び出し]
         D -->|成功| E["setPosts でデータ設定, setLoading false"]
         D -->|失敗| F["setError でエラー設定, setLoading false"]
-        
+
         G[createPost 関数] --> H[postsApi.create 呼び出し]
         H -->|成功| I["setPosts で配列に新投稿追加, success true 返却"]
         H -->|失敗| J["success false, error 返却"]
-        
+
         K[return オブジェクト] --> L["posts, loading, error, createPost を呼び出し元に提供"]
     end
 ```
@@ -764,14 +764,14 @@ export const postsApi = {
     // fetch() : ブラウザ標準の HTTP 通信機能
     // テンプレートリテラル（``）を使って URL を構築: /api/v1/posts
     const response = await fetch(`${API_BASE}/posts`);
-    
+
     // response.ok : HTTP ステータスコードが 200-299 の範囲かチェック
     if (!response.ok) {
       // エラー時は Error オブジェクトを投げる（throw）
       // これにより呼び出し元の catch ブロックでエラーをキャッチできる
       throw new Error('Failed to fetch posts');
     }
-    
+
     // response.json() : レスポンスの JSON データを JavaScript オブジェクトに変換
     return response.json();
   },
@@ -780,35 +780,35 @@ export const postsApi = {
   async create(text) {
     const response = await fetch(`${API_BASE}/posts`, {
       method: 'POST',  // HTTP メソッドを POST に指定
-      
+
       // HTTP ヘッダー：サーバーにリクエストの詳細情報を伝える
       headers: {
         'Content-Type': 'application/json',  // JSON 形式でデータを送信することを明示
       },
-      
+
       // リクエストボディ：サーバーに送信するデータ
       // JSON.stringify() : JavaScript オブジェクトを JSON 文字列に変換
       // { text } は { text: text } の省略記法（ES6 のプロパティ短縮記法）
       body: JSON.stringify({ text }),
     });
-    
+
     // レスポンスのエラーチェック
     if (!response.ok) {
       // サーバーからのエラーレスポンスを JSON として取得
       const error = await response.json();
-      
+
       // error.detail があればそれを、なければデフォルトメッセージを使用
       // || 演算子：左側が falsy（undefined, null, '' など）なら右側を使用
       throw new Error(error.detail || 'Failed to create post');
     }
-    
+
     // 成功時は作成された投稿データを JSON として返す
     return response.json();
   }
 };
 ```
 
-**🎯 API通信の流れ：**
+**API通信の流れ：**
 
 ```mermaid
 graph LR
@@ -817,7 +817,7 @@ graph LR
         B --> C{"response.ok?"}
         C -->|Yes| D["response.json 返却"]
         C -->|No| E["Error を throw"]
-        
+
         F["postsApi.create(text)"] --> G["fetch POST /api/v1/posts with JSON body"]
         G --> H{"response.ok?"}
         H -->|Yes| I["response.json 返却"]
@@ -829,12 +829,12 @@ graph LR
 
 ```mermaid
 graph TB
-    subgraph "🎨 フロントエンド データフロー"
-        U[👤 ユーザー操作] --> UI[PostList.jsx]
+    subgraph "フロントエンド データフロー"
+        U[ユーザー操作] --> UI[PostList.jsx]
         UI --> H[usePosts.js カスタムフック]
         H --> A[posts.js API層]
-        A --> S[🌐 サーバー]
-        
+        A --> S[サーバー]
+
         subgraph "useState で管理される状態"
             ST1[posts: 投稿配列]
             ST2[loading: 読み込み状態]
@@ -842,25 +842,25 @@ graph TB
             ST4[text: 入力テキスト]
             ST5[creating: 作成中フラグ]
         end
-        
+
         H -.-> ST1
         H -.-> ST2
         H -.-> ST3
         UI -.-> ST4
         UI -.-> ST5
-        
+
         S --> A
         A --> H
         H --> UI
         UI --> U
     end
-    
+
     classDef user fill:#FFE6CC,stroke:#FF8800,color:#000
     classDef component fill:#CCE6FF,stroke:#0066CC,color:#000
     classDef hook fill:#E6CCFF,stroke:#8800CC,color:#000
     classDef api fill:#CCFFE6,stroke:#00CC44,color:#000
     classDef state fill:#FFCCCC,stroke:#CC0000,color:#000
-    
+
     class U user
     class UI component
     class H hook
@@ -872,7 +872,7 @@ graph TB
 
 #### 3.9.1 コンポーネント設計パターン
 
-**📋 このアプリで採用している設計パターン：**
+**このアプリで採用している設計パターン：**
 
 1. **Container/Presentational パターン**
    - **Container（App.jsx）**: データ管理とロジック
@@ -886,34 +886,34 @@ graph TB
 
 ```mermaid
 graph TD
-    subgraph "🏗️ フロントエンド設計パターン"
+    subgraph "フロントエンド設計パターン"
         subgraph "Container Component"
             APP["App.jsx#10;- データ管理#10;- 状態保持#10;- ビジネスロジック"]
         end
-        
+
         subgraph "Custom Hook"
             HOOK["usePosts.js#10;- 状態管理#10;- API通信#10;- 副作用処理"]
         end
-        
+
         subgraph "Presentational Component"
             LIST["PostList.jsx#10;- UI表示#10;- ユーザー操作#10;- フォーム管理"]
         end
-        
+
         subgraph "Service Layer"
             API["posts.js#10;- HTTP通信#10;- データ変換#10;- エラーハンドリング"]
         end
-        
+
         APP --> HOOK
         HOOK --> API
         APP --> LIST
         LIST -.->|イベント| APP
     end
-    
+
     classDef container fill:#E3F2FD,stroke:#1976D2,color:#000
     classDef hook fill:#F3E5F5,stroke:#7B1FA2,color:#000
     classDef presentation fill:#E8F5E8,stroke:#388E3C,color:#000
     classDef service fill:#FFF3E0,stroke:#F57C00,color:#000
-    
+
     class APP container
     class HOOK hook
     class LIST presentation
@@ -922,7 +922,7 @@ graph TD
 
 #### 3.9.2 状態管理の設計
 
-**🔄 状態の種類と管理場所：**
+**状態の種類と管理場所：**
 
 | 状態の種類 | 管理場所 | 理由 | 例 |
 |-----------|---------|------|-----|
@@ -936,24 +936,24 @@ graph LR
         subgraph "アプリケーション状態"
             GLOBAL["usePosts.js#10;- posts: 投稿データ#10;- loading: 読み込み状態#10;- error: エラー情報"]
         end
-        
+
         subgraph "コンポーネント状態"
             LOCAL["PostList.jsx#10;- text: 入力テキスト#10;- creating: 作成中フラグ#10;- createError: 作成エラー"]
         end
-        
+
         subgraph "派生状態"
             DERIVED["計算結果#10;- posts.length#10;- text.length#10;- isEmpty"]
         end
-        
+
         GLOBAL -.->|props| LOCAL
         GLOBAL -.->|計算| DERIVED
         LOCAL -.->|計算| DERIVED
     end
-    
+
     classDef global fill:#E1F5FE,stroke:#0277BD,color:#000
     classDef local fill:#F1F8E9,stroke:#689F38,color:#000
     classDef derived fill:#FFF8E1,stroke:#FFA000,color:#000
-    
+
     class GLOBAL global
     class LOCAL local
     class DERIVED derived
@@ -961,23 +961,23 @@ graph LR
 
 #### 3.9.3 イベントハンドリングパターン
 
-**⚡ イベントの流れ：**
+**イベントの流れ：**
 
 ```mermaid
 sequenceDiagram
-    participant U as 👤 ユーザー
-    participant Form as 📝 フォーム
-    participant PostList as 🎨 PostList
-    participant App as 🏠 App
-    participant Hook as 🔄 usePosts
-    participant API as 🌐 posts.js
-    
+    participant U as ユーザー
+    participant Form as フォーム
+    participant PostList as PostList
+    participant App as App
+    participant Hook as usePosts
+    participant API as posts.js
+
     Note over U,API: フォーム送信のイベントフロー
-    
+
     U->>Form: 1. テキスト入力
     Form->>PostList: 2. onChange イベント
     PostList->>PostList: 3. setText(value) - ローカル状態更新
-    
+
     U->>Form: 4. 送信ボタンクリック
     Form->>PostList: 5. onSubmit イベント
     PostList->>PostList: 6. handleSubmit実行
@@ -994,7 +994,7 @@ sequenceDiagram
 
 #### 3.9.4 Reactの設計原則
 
-**📐 このアプリで実践している設計原則：**
+**このアプリで実践している設計原則：**
 
 1. **単一責任の原則 (SRP)**
    - App.jsx: データの橋渡し
@@ -1004,9 +1004,9 @@ sequenceDiagram
 
 2. **関心の分離 (Separation of Concerns)**
    ```
-   📱 UI層: PostList.jsx（見た目）
-   🔄 状態層: usePosts.js（データ管理）
-   🌐 通信層: posts.js（API）
+   UI層: PostList.jsx（見た目）
+   状態層: usePosts.js（データ管理）
+   通信層: posts.js（API）
    ```
 
 3. **データの一方向フロー (Unidirectional Data Flow)**
@@ -1017,34 +1017,34 @@ sequenceDiagram
 
 #### 3.9.5 エラーハンドリング戦略
 
-**🚨 エラー処理の階層化：**
+**エラー処理の階層化：**
 
 ```mermaid
 graph TD
     subgraph "エラーハンドリングの階層"
-        subgraph "🎨 UI層"
+        subgraph "UI層"
             UI_ERROR["PostList.jsx#10;- フォームバリデーション#10;- ユーザー向けメッセージ表示"]
         end
-        
-        subgraph "🔄 ロジック層"
+
+        subgraph "ロジック層"
             LOGIC_ERROR["usePosts.js#10;- API通信エラーキャッチ#10;- 状態の整合性保持"]
         end
-        
-        subgraph "🌐 通信層"
+
+        subgraph "通信層"
             API_ERROR["posts.js#10;- HTTPエラーハンドリング#10;- レスポンス検証"]
         end
-        
+
         UI_ERROR --> LOGIC_ERROR
         LOGIC_ERROR --> API_ERROR
-        
+
         API_ERROR -.->|エラー情報| LOGIC_ERROR
         LOGIC_ERROR -.->|エラー状態| UI_ERROR
     end
-    
+
     classDef ui fill:#FFEBEE,stroke:#C62828,color:#000
     classDef logic fill:#FFF3E0,stroke:#EF6C00,color:#000
     classDef api fill:#F3E5F5,stroke:#8E24AA,color:#000
-    
+
     class UI_ERROR ui
     class LOGIC_ERROR logic
     class API_ERROR api
@@ -1060,7 +1060,7 @@ graph TD
 
 #### 3.9.6 パフォーマンス考慮事項
 
-**⚡ このアプリでのパフォーマンス戦略：**
+**このアプリでのパフォーマンス戦略：**
 
 1. **状態更新の最適化**
    - 必要最小限の状態のみ更新
@@ -1076,7 +1076,7 @@ graph TD
 
 #### 3.9.7 テスタビリティの設計
 
-**🧪 テストしやすい設計：**
+**テストしやすい設計：**
 
 ```mermaid
 graph LR
@@ -1084,20 +1084,20 @@ graph LR
         subgraph "単体テスト"
             UNIT["Pure Components#10;- PostList (propsのみ)#10;- 純粋関数"]
         end
-        
+
         subgraph "統合テスト"
             INTEGRATION["Custom Hooks#10;- usePosts#10;- API通信を含む"]
         end
-        
+
         subgraph "E2Eテスト"
             E2E["全体フロー#10;- ユーザー操作#10;- 実際のAPI通信"]
         end
     end
-    
+
     classDef unit fill:#E8F5E8,stroke:#4CAF50,color:#000
     classDef integration fill:#E3F2FD,stroke:#2196F3,color:#000
     classDef e2e fill:#FFF3E0,stroke:#FF9800,color:#000
-    
+
     class UNIT unit
     class INTEGRATION integration
     class E2E e2e
@@ -1112,26 +1112,26 @@ graph LR
 
 ---
 
-## ⚙️ 4. バックエンドのコードを読んでいこう
+## 4. バックエンドのコードを読んでいこう
 
 ### 4.1 バックエンドのファイル構造
 
 ```mermaid
 graph TD
-    subgraph "📁 server/"
-        subgraph "📁 app/"
+    subgraph "server/"
+        subgraph "app/"
             MAIN["main.py - FastAPI起動"]
-            subgraph "📁 api/v1/"
+            subgraph "api/v1/"
                 POSTS["posts.py - APIエンドポイント"]
             end
-            subgraph "📁 services/"
+            subgraph "services/"
                 SERVICE["post_service.py - ビジネスロジック"]
             end
-            subgraph "📁 db/"
+            subgraph "db/"
                 REPO["repository.py - DB操作"]
                 SCHEMA["schema.sql - テーブル定義"]
             end
-            subgraph "📁 core/"
+            subgraph "core/"
                 CONFIG["config.py - 設定管理"]
             end
         end
@@ -1146,13 +1146,13 @@ graph TD
     classDef important fill:#FFE6E6,stroke:#FF4444,color:#000
     classDef config fill:#E6F3FF,stroke:#4444FF,color:#000
     classDef data fill:#E6FFE6,stroke:#44FF44,color:#000
-    
+
     class MAIN,POSTS,SERVICE,REPO important
     class CONFIG,REQ config
     class SCHEMA data
 ```
 
-**🔍 読む順序：** `main.py` → `posts.py` → `post_service.py` → `repository.py` → `schema.sql`
+**読む順序：** `main.py` → `posts.py` → `post_service.py` → `repository.py` → `schema.sql`
 
 ### 4.2 main.py - FastAPIサーバーの起動
 
@@ -1194,7 +1194,7 @@ async def startup_event():
 app.include_router(posts.router, prefix=settings.API_PREFIX)
 ```
 
-**🎯 main.py の処理流れ：**
+**main.py の処理流れ：**
 
 ```mermaid
 graph TD
@@ -1202,7 +1202,7 @@ graph TD
     B --> C["startup イベント登録: posts.startup"]
     C --> D["posts ルーター登録: prefix=/api/v1"]
     D --> E["サーバー起動待機"]
-    
+
     F["リクエスト受信"] --> G{"パス判定"}
     G -->|"/api/v1/posts/*"| H["posts ルーターに転送"]
     G -->|"その他"| I["404 Not Found"]
@@ -1280,7 +1280,7 @@ async def create_post(
         raise HTTPException(status_code=400, detail=str(e))
 ```
 
-**🎯 posts.py のAPI処理流れ：**
+**posts.py のAPI処理流れ：**
 
 ```mermaid
 graph TD
@@ -1289,7 +1289,7 @@ graph TD
         B1 --> C1["post_service.get_all_posts 呼び出し"]
         C1 --> D1["投稿配列を JSON で返却"]
     end
-    
+
     subgraph "POST /posts エンドポイント"
         A2["HTTP POST /api/v1/posts"] --> B2["リクエストボディを PostCreate でバリデーション"]
         B2 -->|成功| C2["create_post 関数実行"]
@@ -1317,10 +1317,10 @@ from app.db import repository  # データベース操作層
 async def get_all_posts() -> List[Dict]:
     """
     全ての投稿を取得する
-    
+
     ビジネスロジック：
     - データベースから投稿一覧を取得
-    
+
     戻り値: 投稿データの辞書のリスト
     """
     # リポジトリ層に処理を委譲（データアクセスの詳細は隠蔽）
@@ -1332,16 +1332,16 @@ async def get_all_posts() -> List[Dict]:
 async def create_post(text: str) -> Dict:
     """
     新しい投稿を作成する
-    
+
     ビジネスルール：
     - 投稿内容は1文字以上255文字以内である必要がある
     - 空文字列や空白のみの投稿は許可しない
-    
+
     引数:
         text: 投稿内容
-        
+
     戻り値: 作成された投稿データ
-    
+
     例外:
         ValueError: ビジネスルール違反時（文字数制限等）
     """
@@ -1351,13 +1351,13 @@ async def create_post(text: str) -> Dict:
         # ValueError: ビジネスロジック関連のエラー
         # API層でHTTPステータス400に変換される
         raise ValueError("Text must be between 1 and 255 characters")
-    
+
     # データベースに投稿を保存
     post = await repository.create_post(text)
     return post
 ```
 
-**🎯 post_service.py の処理流れ：**
+**post_service.py の処理流れ：**
 
 ```mermaid
 graph TD
@@ -1365,7 +1365,7 @@ graph TD
         A1["API層から呼び出し"] --> B1["repository.get_all_posts 実行"]
         B1 --> C1["投稿配列を返却"]
     end
-    
+
     subgraph "create_post(text) 関数"
         A2["API層から呼び出し"] --> B2["ビジネスルール検証: 文字数チェック"]
         B2 -->|OK| C2["repository.create_post 実行"]
@@ -1387,7 +1387,7 @@ from app.core.config import settings
 async def get_db_connection():
     """
     PostgreSQL データベースへの接続を確立する
-    
+
     戻り値: asyncpg.Connection オブジェクト
     """
     return await asyncpg.connect(settings.DATABASE_URL)
@@ -1401,7 +1401,7 @@ async def init_db():
     # SQL ファイルを読み込み
     with open("app/db/schema.sql", "r") as f:
         schema = f.read()
-    
+
     # データベース接続を取得
     conn = await get_db_connection()
     try:
@@ -1415,7 +1415,7 @@ async def init_db():
 async def get_all_posts() -> List[Dict]:
     """
     データベースから全ての投稿を取得する
-    
+
     戻り値: 投稿データの辞書のリスト
             [{"id": 1, "text": "投稿内容", "created_at": datetime}, ...]
     """
@@ -1435,10 +1435,10 @@ async def get_all_posts() -> List[Dict]:
 async def create_post(text: str) -> Dict:
     """
     新しい投稿をデータベースに保存する
-    
+
     引数:
         text: 投稿内容
-        
+
     戻り値: 作成された投稿データの辞書
            {"id": 新しいID, "text": "投稿内容", "created_at": datetime}
     """
@@ -1457,22 +1457,22 @@ async def create_post(text: str) -> Dict:
         await conn.close()
 ```
 
-**🎯 repository.py の処理流れ：**
+**repository.py の処理流れ：**
 
 ```mermaid
 graph TD
     subgraph "データベース操作の流れ"
         A["サービス層から呼び出し"] --> B["get_db_connection で接続取得"]
         B --> C{"処理種別"}
-        
+
         C -->|初期化| D1["schema.sql 読み込み"]
         D1 --> E1["CREATE TABLE 実行"]
         E1 --> F1["接続クローズ"]
-        
+
         C -->|一覧取得| D2["SELECT * FROM posts ORDER BY id DESC"]
         D2 --> E2["結果を辞書配列に変換"]
         E2 --> F2["接続クローズ"]
-        
+
         C -->|新規作成| D3["INSERT INTO posts ... RETURNING ..."]
         D3 --> E3["作成されたレコードを辞書に変換"]
         E3 --> F3["接続クローズ"]
@@ -1492,12 +1492,12 @@ CREATE TABLE IF NOT EXISTS posts (
     -- SERIAL: PostgreSQL の自動増分型（1, 2, 3... と自動で番号が振られる）
     -- PRIMARY KEY: 主キー（テーブル内で重複しない一意な値）
     id SERIAL PRIMARY KEY,
-    
+
     -- text: 投稿の内容
     -- VARCHAR(255): 可変長文字列、最大255文字まで
     -- NOT NULL: 空の値（NULL）を許可しない
     text VARCHAR(255) NOT NULL,
-    
+
     -- created_at: 投稿の作成日時
     -- TIMESTAMP: 日付と時刻を保存するデータ型
     -- DEFAULT CURRENT_TIMESTAMP: レコード作成時に現在時刻を自動設定
@@ -1505,7 +1505,7 @@ CREATE TABLE IF NOT EXISTS posts (
 );
 ```
 
-**🎯 テーブル構造：**
+**テーブル構造：**
 
 ```mermaid
 erDiagram
@@ -1524,26 +1524,26 @@ erDiagram
 
 ```mermaid
 graph LR
-    subgraph "🛣️ API エンドポイント"
+    subgraph "API エンドポイント"
         subgraph "GET /api/v1/posts"
             G1["リクエスト"] --> G2["パラメータなし"]
             G2 --> G3["レスポンス: 投稿配列"]
             G3 --> G4["配列形式のJSON"]
         end
-        
+
         subgraph "POST /api/v1/posts"
             P1["リクエスト"] --> P2["ボディ: text string"]
             P2 --> P3["レスポンス: 作成された投稿"]
             P3 --> P4["投稿オブジェクトJSON"]
         end
     end
-    
-    subgraph "📋 バリデーション"
+
+    subgraph "バリデーション"
         V1["text: 必須"]
         V2["min_length: 1"]
         V3["max_length: 255"]
     end
-    
+
     P2 --> V1
     P2 --> V2
     P2 --> V3
@@ -1551,7 +1551,7 @@ graph LR
 
 ---
 
-## 🚀 5. 実践演習：投稿削除機能を実装してみよう
+## 5. 実践演習：投稿削除機能を実装してみよう
 
 この実習では、実際の開発フローを体験しながら投稿削除機能を実装します。
 
@@ -1559,7 +1559,7 @@ graph LR
 
 ```mermaid
 graph LR
-    subgraph "🎯 削除機能の仕様"
+    subgraph "削除機能の仕様"
         A[投稿一覧に削除ボタン追加] --> B[削除ボタンクリック]
         B --> C[DELETE API 呼び出し]
         C --> D[データベースから削除]
@@ -1571,14 +1571,14 @@ graph LR
 
 ```mermaid
 graph TD
-    A["📋 Step 1: Repository層 - データベース削除処理"] --> B["💼 Step 2: Service層 - ビジネスロジック"]
-    B --> C["🛣️ Step 3: API層 - DELETE エンドポイント"]
-    C --> D["🌐 Step 4: API通信層 - delete関数追加"]
-    D --> E["🔄 Step 5: 状態管理層 - 削除処理追加"]
-    E --> F["🎨 Step 6: UI層 - 削除ボタン追加"]
+    A["Step 1: Repository層 - データベース削除処理"] --> B["Step 2: Service層 - ビジネスロジック"]
+    B --> C["Step 3: API層 - DELETE エンドポイント"]
+    C --> D["Step 4: API通信層 - delete関数追加"]
+    D --> E["Step 5: 状態管理層 - 削除処理追加"]
+    E --> F["Step 6: UI層 - 削除ボタン追加"]
 ```
 
-### 🔧 Step 1: Repository層の実装
+### Step 1: Repository層の実装
 
 **ファイルパス**: `server/app/db/repository.py`
 
@@ -1588,10 +1588,10 @@ graph TD
 async def delete_post(post_id: int) -> bool:
     """
     指定されたIDの投稿を削除する
-    
+
     引数:
         post_id: 削除する投稿のID
-        
+
     戻り値:
         True: 削除成功, False: 対象が見つからない
     """
@@ -1609,7 +1609,7 @@ async def delete_post(post_id: int) -> bool:
         await conn.close()
 ```
 
-### 💼 Step 2: Service層の実装
+### Step 2: Service層の実装
 
 **ファイルパス**: `server/app/services/post_service.py`
 
@@ -1619,28 +1619,28 @@ async def delete_post(post_id: int) -> bool:
 async def delete_post(post_id: int) -> bool:
     """
     指定されたIDの投稿を削除する
-    
+
     ビジネスルール:
     - 投稿IDは正の整数である必要がある
-    
+
     引数:
         post_id: 削除する投稿のID
-        
+
     戻り値:
         True: 削除成功, False: 失敗
-        
+
     例外:
         ValueError: 投稿IDが無効な場合
     """
     # ビジネスルール検証
     if post_id <= 0:
         raise ValueError("Post ID must be a positive integer")
-    
+
     # リポジトリ層に処理を委譲
     return await repository.delete_post(post_id)
 ```
 
-### 🛣️ Step 3: API層の実装
+### Step 3: API層の実装
 
 **ファイルパス**: `server/app/api/v1/posts.py`
 
@@ -1652,32 +1652,32 @@ async def delete_post(post_id: int) -> bool:
 async def delete_post(post_id: int):
     """
     指定されたIDの投稿を削除する API エンドポイント
-    
+
     パスパラメータ:
         post_id: 削除する投稿のID
-        
+
     戻り値:
         成功: {"message": "Post {id} deleted successfully"}
-        
+
     例外:
         400: 無効な投稿ID
         404: 投稿が見つからない
     """
     try:
         success = await post_service.delete_post(post_id)
-        
+
         if success:
             return {"message": f"Post {post_id} deleted successfully"}
         else:
             raise HTTPException(
-                status_code=404, 
+                status_code=404,
                 detail=f"Post with id {post_id} not found"
             )
     except ValueError as e:
         raise HTTPException(status_code=400, detail=str(e))
 ```
 
-### 🌐 Step 4: API通信層の実装
+### Step 4: API通信層の実装
 
 **ファイルパス**: `client/src/api/posts.js`
 
@@ -1689,17 +1689,17 @@ async delete(postId) {
   const response = await fetch(`${API_BASE}/posts/${postId}`, {
     method: 'DELETE',  // HTTP DELETEメソッド
   });
-  
+
   if (!response.ok) {
     const error = await response.json();
     throw new Error(error.detail || `Failed to delete post: ${response.status}`);
   }
-  
+
   return response.json();
 }
 ```
 
-### 🔄 Step 5: 状態管理層の実装
+### Step 5: 状態管理層の実装
 
 **ファイルパス**: `client/src/hooks/usePosts.js`
 
@@ -1734,7 +1734,7 @@ return {
 };
 ```
 
-### 🎨 Step 6: UI層の実装
+### Step 6: UI層の実装
 
 #### App.jsx の修正
 
@@ -1742,10 +1742,10 @@ return {
 
 ```javascript
 function App() {
-  const { 
-    posts, 
-    loading, 
-    error, 
+  const {
+    posts,
+    loading,
+    error,
     createPost,
     deletePost  // 追加
   } = usePosts();
@@ -1753,8 +1753,8 @@ function App() {
   return (
     <div style={{ padding: '20px' }}>
       <h1>FastAPI + React Posts App</h1>
-      
-      <PostList 
+
+      <PostList
         posts={posts}
         loading={loading}
         error={error}
@@ -1780,10 +1780,10 @@ export function PostList({ posts, loading, error, onCreatePost, onDeletePost }) 
 
 ```javascript
 {posts.map(post => (
-  <li key={post.id} style={{ 
-    marginBottom: '10px', 
-    padding: '10px', 
-    border: '1px solid #ddd', 
+  <li key={post.id} style={{
+    marginBottom: '10px',
+    padding: '10px',
+    border: '1px solid #ddd',
     borderRadius: '4px',
     display: 'flex',
     justifyContent: 'space-between',
@@ -1815,16 +1815,16 @@ export function PostList({ posts, loading, error, onCreatePost, onDeletePost }) 
 
 ```mermaid
 sequenceDiagram
-    participant U as 👤 ユーザー
-    participant UI as 🎨 PostList.jsx
-    participant H as 🔄 usePosts.js
-    participant A as 🌐 posts.js
-    participant F as ⚡ FastAPI
-    participant S as 💼 Service
-    participant R as 🗃️ Repository
-    participant D as 🗄️ PostgreSQL
+    participant U as ユーザー
+    participant UI as PostList.jsx
+    participant H as usePosts.js
+    participant A as posts.js
+    participant F as FastAPI
+    participant S as Service
+    participant R as Repository
+    participant D as PostgreSQL
 
-    Note over U,D: 🗑️ 投稿削除の流れ
+    Note over U,D: 投稿削除の流れ
 
     U->>UI: 1. 削除ボタンクリック
     UI->>H: 2. deletePost(postId) 呼び出し
@@ -1864,13 +1864,13 @@ http://localhost:8000/docs にアクセスして：
 1. 新しい `DELETE /api/v1/posts/{post_id}` エンドポイントを確認
 2. 「Try it out」で実際にAPIを試してみる
 
-**🎯 おめでとうございます！**
+**おめでとうございます！**
 
 これで投稿削除機能の実装が完了しました。実際の開発でも同じような流れで機能を追加していきます！
 
 ---
 
-## 🎓 講座の振り返り
+## 講座の振り返り
 
 ### システム全体のアーキテクチャ
 
@@ -1883,7 +1883,7 @@ graph TB
         A3["posts.js#10;API 通信層"]
         A4["vite.config.js#10;開発環境設定"]
     end
-    
+
     subgraph "バックエンド"
         B["main.py#10;エントリーポイント"]
         B1["posts.py#10;API エンドポイント（URL定義）"]
@@ -1891,16 +1891,16 @@ graph TB
         B3["repository.py#10;データアクセス層"]
         B4["config.py#10;設定管理"]
     end
-    
+
     subgraph "データベース"
         C[("PostgreSQL")]
         C1["posts テーブル#10;schema.sql"]
     end
-    
+
     subgraph "インフラ"
         D["docker-compose.yml#10;サービス連携"]
     end
-    
+
     A <-->|REST API| B
     B <-->|SQL| C
     A --> A1
@@ -1913,12 +1913,12 @@ graph TB
     D --> A
     D --> B
     D --> C
-    
+
     classDef frontend fill:#3498db,stroke:#2c3e50,color:#fff
     classDef backend fill:#2ecc71,stroke:#27ae60,color:#fff
     classDef database fill:#e74c3c,stroke:#c0392b,color:#fff
     classDef infra fill:#f39c12,stroke:#d68910,color:#fff
-    
+
     class A,A1,A2,A3,A4 frontend
     class B,B1,B2,B3,B4 backend
     class C,C1 database
@@ -1929,15 +1929,15 @@ graph TB
 
 ```mermaid
 graph TB
-    subgraph "🏗️ レイヤードアーキテクチャ"
-        A["🎨 Presentation Layer - UI Components"]
-        B["🔄 Application Layer - Custom Hooks"]
-        C["🌐 Infrastructure Layer - API Communication"]
-        D["🛣️ API Layer - HTTP Endpoints"]
-        E["💼 Service Layer - Business Logic"]
-        F["🗃️ Repository Layer - Data Access"]
-        G["🗄️ Data Layer - Database"]
-        
+    subgraph "レイヤードアーキテクチャ"
+        A["Presentation Layer - UI Components"]
+        B["Application Layer - Custom Hooks"]
+        C["Infrastructure Layer - API Communication"]
+        D["API Layer - HTTP Endpoints"]
+        E["Service Layer - Business Logic"]
+        F["Repository Layer - Data Access"]
+        G["Data Layer - Database"]
+
         A --> B
         B --> C
         C --> D
@@ -1998,11 +1998,11 @@ mindmap
 
 ---
 
-## 📖 用語集・概念説明
+## 用語集・概念説明
 
 講座中に出てきた重要な用語や概念をまとめました。分からない用語があったときの参考にしてください。
 
-### 🎨 フロントエンド用語
+### フロントエンド用語
 
 #### React関連
 | 用語 | 読み方 | 説明 | 例 |
@@ -2025,7 +2025,7 @@ mindmap
 | **Arrow Function** | アロー関数 | 関数の短縮記法 | `() => {}` |
 | **Destructuring** | 分割代入 | オブジェクトから値を取り出す | `const {posts} = usePosts()` |
 
-### ⚙️ バックエンド用語
+### バックエンド用語
 
 #### API・HTTP関連
 | 用語 | 読み方 | 説明 | 例 |
@@ -2048,7 +2048,7 @@ mindmap
 | **Dependency** | 依存性 | 他の機能に依存する関係 | サービス層→リポジトリ層 |
 | **Validation** | バリデーション | 入力データの検証 | 文字数制限、必須チェック |
 
-### 🗄️ データベース用語
+### データベース用語
 
 #### SQL・データベース関連
 | 用語 | 読み方 | 説明 | 例 |
@@ -2069,7 +2069,7 @@ mindmap
 | **Connection** | コネクション | データベースへの接続 | `await conn.fetch()` |
 | **Transaction** | トランザクション | 一連のデータベース操作 | 複数操作をまとめて実行 |
 
-### 🏗️ アーキテクチャ用語
+### アーキテクチャ用語
 
 #### 設計パターン
 | 用語 | 読み方 | 説明 | 例 |
@@ -2080,7 +2080,7 @@ mindmap
 | **Service Layer** | サービス層 | ビジネスロジックを管理 | post_service.py |
 | **Business Logic** | ビジネスロジック | アプリ固有の処理ルール | 文字数制限、投稿作成ルール |
 
-### 🔧 開発環境用語
+### 開発環境用語
 
 #### Docker・インフラ関連
 | 用語 | 読み方 | 説明 | 例 |
@@ -2100,7 +2100,7 @@ mindmap
 | **Swagger** | スワッガー | API仕様書の自動生成 | FastAPIの `/docs` |
 | **CORS** | コルス | クロスオリジン通信の制御 | フロントエンド↔バックエンド通信 |
 
-### 💡 よく使われる略語
+### よく使われる略語
 
 | 略語 | 正式名称 | 意味 |
 |------|----------|------|
@@ -2115,7 +2115,7 @@ mindmap
 | **DB** | Database | データベース |
 | **URL** | Uniform Resource Locator | ウェブアドレス |
 
-### 🤔 理解を深めるための質問
+### 理解を深めるための質問
 
 各用語について、以下の質問を自分に投げかけてみてください：
 
@@ -2124,7 +2124,7 @@ mindmap
 3. **この用語がなかったら何が困る？**
 4. **似ている用語との違いは何？**
 
-**💡 学習のコツ：**
+**学習のコツ：**
 - 最初はすべて覚える必要はありません
 - 実際にコードを書きながら少しずつ覚えていきましょう
 - 分からない用語が出たらこのセクションに戻ってきてください
